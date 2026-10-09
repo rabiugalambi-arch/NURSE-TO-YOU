@@ -1,0 +1,12 @@
+{
+  "projectId": "nurse-to-you",
+  "appId": "1:845895290646:web:5bc8d49af72c16346b8a37",
+  "apiKey": "AIzaSyDL_p7I1OCYzjJq812VU0R9i_PKII8heAE",
+  "authDomain": "nurse-to-you.firebaseapp.com",
+  "firestoreDatabaseId": "(default)",
+  "storageBucket": "nurse-to-you.firebasestorage.app",
+  "messagingSenderId": "845895290646",
+  "measurementId": "G-RCWT2CXN00",
+  "oAuthClientId": "",
+  "recaptchaSiteKey": ""
+}

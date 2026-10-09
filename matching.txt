@@ -1,0 +1,142 @@
+{step === 'matching' && (
+          <div className="flex flex-col h-full bg-slate-50 items-center justify-center p-8 text-center animate-in zoom-in duration-300">
+            <h2 className="text-2xl font-bold text-blue-900 mb-2">Nurse To You</h2>
+            <p className="text-gray-600 font-medium mb-12">Automated Matching</p>
+            
+            <div className="relative w-64 h-64 mb-12">
+              <div className="absolute inset-0 border-[1px] border-teal-200 rounded-full animate-ping opacity-20"></div>
+              <div className="absolute inset-4 border-[1px] border-teal-300 rounded-full animate-ping opacity-40" style={{ animationDelay: '0.5s' }}></div>
+              <div className="absolute inset-12 border-[1px] border-teal-400 rounded-full animate-ping opacity-60" style={{ animationDelay: '1s' }}></div>
+              <div className="absolute inset-0 bg-teal-50 rounded-full flex items-center justify-center shadow-inner">
+                <div className="w-20 h-20 bg-blue-900 rounded-full flex items-center justify-center text-white shadow-xl z-10 relative">
+                  <ActivitySquare className="w-8 h-8" />
+                </div>
+              </div>
+            </div>
+            
+            <h3 className="text-xl font-bold text-blue-900 mb-6">Searching for providers...</h3>
+            
+            <div className="flex gap-3 mb-8">
+              <span className="bg-white border border-gray-200 text-gray-700 text-sm px-4 py-2 rounded-full shadow-sm flex items-center gap-2">
+                <MapPin className="w-4 h-4"/> Kano Central
+              </span>
+              <span className="bg-teal-200 border border-teal-300 text-teal-900 text-sm px-4 py-2 rounded-full shadow-sm flex items-center gap-2 font-medium">
+                <ActivitySquare className="w-4 h-4"/> {selectedService?.name}
+              </span>
+            </div>
+            
+            <div className="w-full bg-white rounded-2xl border border-gray-200 p-5 shadow-sm text-left">
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Verifying Criteria</p>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center bg-slate-50 p-3 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <ShieldCheck className="w-5 h-5 text-blue-900" />
+                    <span className="font-semibold text-gray-900 text-sm">Professional Credentials</span>
+                  </div>
+                  <div className="w-5 h-5 rounded-full border-2 border-gray-300"></div>
+                </div>
+                <div className="flex justify-between items-center bg-slate-50 p-3 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <Clock className="w-5 h-5 text-teal-600" />
+                    <span className="font-semibold text-gray-900 text-sm">Real-time Availability</span>
+                  </div>
+                  <div className="w-5 h-5 rounded-full border-2 border-gray-300"></div>
+                </div>
+                <div className="flex justify-between items-center bg-slate-50 p-3 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <LocateFixed className="w-5 h-5 text-red-800" />
+                    <span className="font-semibold text-gray-900 text-sm">Proximity</span>
+                  </div>
+                  <div className="w-5 h-5 rounded-full border-2 border-gray-300"></div>
+                </div>
+              </div>
+            </div>
+            
+            <button onClick={() => setStep('home')} className="mt-8 text-red-600 font-bold text-sm">Cancel Search</button>
+          </div>
+        )}
+
+        {step === 'results' && (
+          <div className="flex flex-col h-full bg-slate-50 animate-in slide-in-from-right-4 duration-300">
+            <TopNav title="Nurse To You" onBack={() => setStep('location')} />
+            
+            <div className="p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-1">Available Nurses for {selectedService?.name}</h2>
+              <p className="text-gray-500 text-sm flex items-center gap-1 mb-6">
+                <MapPin className="w-4 h-4"/> Showing verified and available providers in Kano State
+              </p>
+              
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide mb-4">
+                <button className="bg-teal-200 text-teal-900 font-semibold px-4 py-2 rounded-full text-sm shrink-0 flex items-center gap-1 border border-teal-300">
+                  <CheckCircle className="w-4 h-4"/> Qualified Only
+                </button>
+                <button className="bg-white border border-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-full text-sm shrink-0">Nearest</button>
+                <button className="bg-white border border-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-full text-sm shrink-0">Top Rated</button>
+              </div>
+              
+              <div className="space-y-4">
+                {providers.length === 0 ? (
+                  <div className="bg-white p-8 rounded-2xl text-center border border-gray-100 shadow-sm mt-8">
+                    <ActivitySquare className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                    <h3 className="font-bold text-gray-900 leading-tight mb-2">No provider is currently available in Kano State.</h3>
+                    <div className="flex flex-col gap-3 mt-4">
+                      <button 
+                        onClick={() => setStep('home')}
+                        className="px-6 py-2 bg-blue-900 text-white rounded-full font-medium shadow-sm hover:bg-blue-800 transition-colors"
+                      >
+                        Try Another Time
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    {providers[0].distanceKm > 10 && (
+                      <div className="bg-orange-50 border border-orange-200 p-4 rounded-xl text-orange-800 text-sm mb-4">
+                        No provider is currently nearby, but these verified providers are available elsewhere in Kano State.
+                      </div>
+                    )}
+                    {providers.map(p => (
+                      <div key={p.id} className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm relative">
+                      <div className="flex gap-4 mb-4">
+                        <div className="w-16 h-16 bg-blue-100 rounded-full flex shrink-0 items-center justify-center relative overflow-hidden">
+                          <UserCircle className="w-12 h-12 text-blue-900 mt-2" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-gray-900 text-lg flex items-center gap-2">
+                            {p.name}
+                            {p.verified && <span className="bg-teal-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-1"><ShieldCheck className="w-3 h-3"/> Verified</span>}
+                          </h3>
+                          <p className="text-gray-600 text-sm mb-1">{p.professionalRole} • {selectedService?.name}</p>
+                          <p className="text-teal-600 text-xs font-bold mb-2">Available</p>
+                          <div className="flex gap-4 text-xs font-medium text-gray-700">
+                            <span className="flex items-center gap-1"><Star className="w-4 h-4 text-yellow-500 fill-yellow-500"/> {p.rating.toFixed(1)} Rating</span>
+                            <span className="flex items-center gap-1"><Navigation className="w-4 h-4 text-gray-400"/> {p.distanceKm.toFixed(1)}km away</span>
+                            <span className="flex items-center gap-1"><Clock className="w-4 h-4 text-gray-400"/> {p.estimatedArrival}m arrival</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex gap-3 mt-4 pt-4 border-t border-gray-50">
+                        <button 
+                          onClick={() => { setSelectedProvider(p); setStep('provider_profile'); }}
+                          className="flex-1 bg-white border border-teal-500 text-teal-600 font-bold py-2.5 rounded-xl text-sm hover:bg-teal-50 transition-colors"
+                        >
+                          View Profile
+                        </button>
+                        <button 
+                          onClick={() => { setSelectedProvider(p); setStep('booking_summary'); }}
+                          className="flex-1 bg-blue-900 text-white font-bold py-2.5 rounded-xl text-sm shadow-md hover:bg-blue-800 transition-colors"
+                        >
+                          Book
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  </>
+                )}
+            </div>
+            <BottomNav />
+          </div>
+        )}
+
+        
